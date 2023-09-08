@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "shoroa_ucc1",
+  "version": "${version}",
+  "name": "UCC Client",
+  "description": "A Client for the UCC from ESS!",
+  "authors": [
+    "Shoroa!"
+  ],
+  "contact": {
+    "homepage": "https://shoroa.gay",
+    "sources": "https://github.com/Quexii/ucc1"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/ucc1/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "gay.shoroa.ucc.Mod"
+    ],
+    "client": [
+      "gay.shoroa.ucc.client.Client"
+    ]
+  },
+  "mixins": [
+    "ucc1.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "minecraft": "1.8.9"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
