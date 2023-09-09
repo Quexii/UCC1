@@ -12,5 +12,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'ucc1_client'
+rootProject.name = 'bolt client'
 

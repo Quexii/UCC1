@@ -47,12 +47,17 @@ repositories {
 }
 
 dependencies {
+    implementation platform("org.lwjgl:lwjgl-bom:3.3.2")
+
+    implementation("com.github.Sol-Client:LWJGL-Patched:bf1d105853")
+    runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-nanovg::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings(legacy.yarn(project.minecraft_version, project.yarn_build))
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${project.fabric_version}"
-
-
 
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
@@ -60,7 +65,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 
-    implementation 'com.github.nevalackin:homo-bus:1.0.0'
+    implementation 'io.github.nevalackin:radbus:1.0.0'
 }
 base {
     archivesName = project.archives_base_name

@@ -1,11 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "gay.shoroa.ucc.mixins",
+  "package": "gay.shoroa.bolt.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "lwjgl.MixinNanoVGGLConfig"
   ],
   "client": [
+    "client.MixinMinecraft",
+    "client.gui.MixinGuiIngame"
   ],
   "injectors": {
     "defaultRequire": 1

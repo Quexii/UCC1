@@ -1,4 +1,4 @@
-package gay.shoroa.ucc;
+package gay.shoroa.bolt;
 
 import net.fabricmc.api.ModInitializer;
 

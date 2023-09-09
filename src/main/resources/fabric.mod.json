@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "shoroa_ucc1",
+  "id": "bolt",
   "version": "${version}",
-  "name": "UCC Client",
+  "name": "Bolt Client",
   "description": "A Client for the UCC from ESS!",
   "authors": [
     "Shoroa!"
@@ -12,18 +12,18 @@
     "sources": "https://github.com/Quexii/ucc1"
   },
   "license": "CC0-1.0",
-  "icon": "assets/ucc1/icon.png",
+  "icon": "assets/bolt/img/logo-128.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "gay.shoroa.ucc.Mod"
+      "gay.shoroa.bolt.Mod"
     ],
     "client": [
-      "gay.shoroa.ucc.client.Client"
+      "gay.shoroa.bolt.client.Client"
     ]
   },
   "mixins": [
-    "ucc1.mixins.json"
+    "bolt.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.19",
