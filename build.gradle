@@ -66,6 +66,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 
     implementation 'io.github.nevalackin:radbus:1.0.0'
+    implementation 'com.github.Wolfsurge:JavaAnimationSystem:1.11'
 }
 base {
     archivesName = project.archives_base_name

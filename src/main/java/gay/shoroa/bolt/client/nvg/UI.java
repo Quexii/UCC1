@@ -1,10 +1,14 @@
 package gay.shoroa.bolt.client.nvg;
 
+import gay.shoroa.bolt.client.util.ColorUtil;
 import lombok.Getter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.nanovg.NanoVGGL2;
+import org.lwjgl.opengl.EXTFramebufferObject;
+import org.lwjgl.opengl.EXTPackedDepthStencil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -35,20 +39,32 @@ public class UI {
     private UI() {
         instancce = this;
 
-        context = NanoVGGL2.nvgCreate(NanoVGGL2.NVG_ANTIALIAS);
+        context = NanoVGGL2.nvgCreate(NanoVGGL2.NVG_ANTIALIAS | NanoVGGL2.NVG_STENCIL_STROKES);
         NVGWrapper.cx = context;
     }
 
 
     public void render(Consumer<UI> renderer, float width, float height, float dpi) {
-        GlStateManager.enableAlpha();
-        GlStateManager.alphaFunc(516,0);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GlStateManager.disableAlpha();
+        fixDepthStencil();
         NVGWrapper.beginFrame(width,height,dpi);
         renderer.accept(this);
         NVGWrapper.endFrame();
+        GlStateManager.enableAlpha();
         GL11.glPopAttrib();
-        GlStateManager.alphaFunc(516,0.1f);
+    }
+
+    private void fixDepthStencil() {
+        if(Minecraft.getMinecraft().getFramebuffer().depthBuffer > -1) {
+            EXTFramebufferObject.glDeleteRenderbuffersEXT(Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+            int id = EXTFramebufferObject.glGenRenderbuffersEXT();
+            EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, id);
+            EXTFramebufferObject.glRenderbufferStorageEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, EXTPackedDepthStencil.GL_DEPTH_STENCIL_EXT, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+            EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, id);
+            EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_STENCIL_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, id);
+            Minecraft.getMinecraft().getFramebuffer().depthBuffer = -1;
+        }
     }
 
     public void rect(float x, float y, float width, float height, Color color) {
@@ -133,6 +149,47 @@ public class UI {
         }, DRAW_STROKE);
 
         nc1.free();
+    }
+
+    public void dropShadow(float x, float y, float w, float h, float radius, float spread, Color color) {
+        NVGColor nvg_color = nvgcolor(color);
+        NVGColor nvg_transparent = nvgcolor(ColorUtil.TRANSPARENT);
+        NVGPaint shadowPaint = NVGPaint.calloc();
+
+        boxGradient(x,y,w,h,radius, spread, nvg_color,nvg_transparent,shadowPaint);
+        path(() -> {
+            NVGWrapper.rrect(x-spread,y-spread,w+spread*2,h+spread*2,radius*2);
+            NVGWrapper.rrect(x,y,w,h,radius);
+            NVGWrapper.pathWinding(2);
+            fillPaint(shadowPaint);
+        }, DRAW_FILL);
+
+        shadowPaint.free();
+        nvg_color.free();
+        nvg_transparent.free();
+    }
+
+    public void horizontalGrad(float x, float y, float w, float h, float radius, Color from, Color to) {
+        gradient(x,y,w,h,x,y,x+w,y,radius,from,to);
+    }
+    public void verticalGrad(float x, float y, float w, float h, float radius, Color from, Color to) {
+        gradient(x,y,w,h,x,y,x,y+h,radius,from,to);
+    }
+
+    public void gradient(float x, float y, float w, float h, float startX, float startY, float endX, float endY, float radius, Color from, Color to) {
+        NVGColor nc1 = nvgcolor(from);
+        NVGColor nc2 = nvgcolor(to);
+        NVGPaint paint = NVGPaint.calloc();
+
+        linearGradient(startX, startY, endX, endY, nc1, nc2, paint);
+        path(() -> {
+            NVGWrapper.rrect(x,y,w,h,radius);
+            fillPaint(paint);
+        }, DRAW_FILL);
+
+        nc1.free();
+        nc2.free();
+        paint.free();
     }
 
     public float textWidth(String text, String face, float size) {

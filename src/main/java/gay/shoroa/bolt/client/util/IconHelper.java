@@ -1395,4 +1395,9 @@ public class IconHelper {
     public static final String youtube = "\uf167";
     public static final String youtube_square = "\uf431";
     public static final String zhihu = "\uf63f";
+
+    public static class Client {
+        public static final String bolt = "\ue901";
+        public static final String bolt_outline = "\ue900";
+    }
 }

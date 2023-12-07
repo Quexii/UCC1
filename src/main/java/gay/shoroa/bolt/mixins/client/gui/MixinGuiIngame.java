@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiIngame.class)
 public class MixinGuiIngame {
-    @Inject(method = "renderGameOverlay", at = @At("TAIL"))
+    @Inject(method = "renderGameOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;tryBlendFuncSeparate(IIII)V", shift = At.Shift.BEFORE, ordinal = 2))
     public void inject$renderGameOverlay(CallbackInfo ci) {
         Client.get().bus().publish(new EventRender2D());
     }

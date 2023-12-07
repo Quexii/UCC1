@@ -4,11 +4,15 @@
   "package": "gay.shoroa.bolt.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "client.entity.MixinEntityLivingBase",
     "lwjgl.MixinNanoVGGLConfig"
   ],
   "client": [
     "client.MixinMinecraft",
-    "client.gui.MixinGuiIngame"
+    "client.entity.MixinEntityPlayerSP",
+    "client.gui.MixinGuiIngame",
+    "client.render.MixinEntityRenderer",
+    "client.settings.MixinKeyBinding"
   ],
   "injectors": {
     "defaultRequire": 1
